@@ -1,0 +1,1 @@
+DB_CONNECTION=mongodb+srv://saleash:soul@saleash.n1xwj.mongodb.net/saleash?retryWrites=true&w=majority
