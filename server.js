@@ -13,17 +13,10 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(morgan('dev'));
 
-// Connect to MongoDB
-mongoose
-  .connect(
-    process.env.DB_CONNECTION,
-    { useNewUrlParser: true, useUnifiedTopology: true },
-  )
-  .then(() => console.log('MongoDB successfully connected'))
-  .catch((err) => console.log(err));
 
 app.use('/api/user', authRouter);
 
+// connect to mongodb and start the server
 const start = async () => {
   try {
     await connect();
