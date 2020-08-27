@@ -1,4 +1,6 @@
 const express = require('express');
+const connect = require('./db/connect');
+require('dotenv').config();
 
 const app = express();
 
@@ -6,7 +8,15 @@ app.get('/', (req, res) => {
   res.status(200).send('HELLO WORLD');
 });
 
-app.listen(5000, () => {
-  // eslint-disable-next-line no-console
-  console.log('Server IS ON');
-});
+const start = async () => {
+  try {
+    await connect();
+    app.listen(process.env.PORT, () => {
+      console.log("Server is ON");
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+start();
