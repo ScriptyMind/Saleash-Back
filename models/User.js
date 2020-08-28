@@ -1,3 +1,28 @@
+<<<<<<< HEAD
+const mongoose = require('mongoose');
+
+const userSchema = new mongoose.Schema(
+  {
+    email: {
+      type: mongoose.SchemaTypes.Email,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    Role: {
+      type: String,
+      enum: ['manager', 'driver', 'agent'],
+      required: true,
+    },
+  },
+);
+
+const User = mongoose.model('user', userSchema);
+
+module.exports = User;
+=======
 /* eslint-disable func-names */
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
@@ -54,3 +79,4 @@ UserSchema.methods.comparePassword = function (password, cb) {
 };
 
 module.exports = mongoose.model('users', UserSchema);
+>>>>>>> 8dcca79eb0a62ac595b4772b12771eddc53e9dc2
