@@ -17,6 +17,7 @@ const agentSchema = mongoose.Schema(
       unique: true,
     },
   },
+  { timestamps: true }
 );
 
 const Agent = mongoose.model('agent', agentSchema);

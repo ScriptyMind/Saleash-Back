@@ -14,7 +14,8 @@ const clientSchema = mongoose.Schema(
       type: String,
       required: true,
     }
-  }
+  },
+  { timestamps: true }
 );
 
 const Client = mongoose.model('client', clientSchema);

@@ -25,6 +25,7 @@ const driverSchema = mongoose.Schema(
       unique: true,
     },
   },
+  { timestamps: true }
 );
 
 const Driver = mongoose.model('driver', driverSchema);

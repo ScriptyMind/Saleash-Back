@@ -1,6 +1,6 @@
 /* eslint-disable func-names */
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -16,7 +16,7 @@ const UserSchema = new mongoose.Schema({
     required: true,
   },
   role: {
-    type: String
+    type: String,
   },
   orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }],
   date: {
@@ -24,7 +24,8 @@ const UserSchema = new mongoose.Schema({
     default: Date.now,
   },
   drivers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Driver' }],
-});
+},
+{ timestamps: true });
 
 // Hash the password before submit to database
 UserSchema.pre('save', function (next) {

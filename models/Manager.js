@@ -21,6 +21,7 @@ const managerSchema = mongoose.Schema(
       unique: true,
     },
   },
+  { timestamps: true }
 );
 
 const Manager = mongoose.model('manager', managerSchema);

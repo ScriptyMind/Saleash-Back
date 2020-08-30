@@ -5,6 +5,7 @@ const orderSchema = mongoose.Schema(
     date: {
       type: Date,
       required: true,
+      default: Date.now
     },
     deliveryDate: {
       type: Date,
@@ -42,6 +43,7 @@ const orderSchema = mongoose.Schema(
       required: true,
     }
   },
+  { timestamps: true }
 );
 
 const Order = mongoose.model('order', orderSchema);

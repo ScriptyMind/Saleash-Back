@@ -23,6 +23,7 @@ const invitationSchema = mongoose.Schema(
       required: true,
     },
   },
+  { timestamps: true }
 );
 
 const Invitation = mongoose.model('invitation', invitationSchema);
