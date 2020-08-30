@@ -18,10 +18,10 @@ app.use('/api/user', authRouter);
 const port = process.env.PORT || 5000;
 const start = async () => {
   try {
+    await connect();
     app.listen(process.env.PORT, () => {
       console.log(`Server up and running on port ${port} !`);
     });
-    await connect();
   } catch (e) {
     console.log(e);
   }
