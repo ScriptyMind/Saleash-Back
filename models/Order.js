@@ -36,6 +36,11 @@ const orderSchema = mongoose.Schema(
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'client',
     },
+    product: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'product',
+      required: true,
+    }
   },
 );
 
