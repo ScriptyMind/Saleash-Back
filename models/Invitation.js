@@ -17,9 +17,9 @@ const invitationSchema = mongoose.Schema(
       ref: 'manager',
       required: true,
     },
-    driver: {
+    user: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: 'driver',
+      ref: 'user',
       required: true,
     },
   },
