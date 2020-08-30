@@ -20,6 +20,7 @@ const managerSchema = mongoose.Schema(
       required: true,
       unique: true,
     },
+    drivers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Driver' }],
   },
   { timestamps: true }
 );

@@ -23,7 +23,6 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  drivers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Driver' }],
 },
 { timestamps: true });
 
