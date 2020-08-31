@@ -1,6 +1,19 @@
 const mongoose = require('mongoose');
 const Invitation = require('../models/Invitation');
 
+const getPending = async (req, res) => {
+  try {
+    const invitations = await Invitation.find({ manager: req.user.id, state: 'pending' })
+      .sort({ createdAt: -1 })
+      .lean()
+      .exec();
+    res.status(200).json({ data: invitations });
+  } catch (e) {
+    console.log(e);
+    res.status(400).end();
+  }
+}
+
 const getAll = async (req, res) => {
   try {
     const invitations = await Invitation.find({ manager: req.user.id })
@@ -17,6 +30,7 @@ const getAll = async (req, res) => {
 const createOne = async (req, res) => {
   // eslint-disable-next-line no-underscore-dangle
   const manager = req.user._id;
+  // eslint-disable-next-line prefer-destructuring
   const company = req.user.company;
   const link = `${req.url}/${mongoose.Types.ObjectId()}`;
   try {
@@ -46,6 +60,7 @@ const deleteOne = async (req, res) => {
 
 module.exports = {
   getAll,
+  getpending,
   createOne,
   deleteOne,
 };
