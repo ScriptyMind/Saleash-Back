@@ -2,13 +2,7 @@ const mongoose = require('mongoose');
 
 const invitationSchema = mongoose.Schema(
   {
-    state: {
-      type: String,
-      required: true,
-      enum: ['pending', 'expired', 'accepted'],
-      default: 'pending',
-    },
-    phone: {
+    company: {
       type: String,
       required: true,
     },
@@ -17,10 +11,15 @@ const invitationSchema = mongoose.Schema(
       ref: 'manager',
       required: true,
     },
-    user: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: 'user',
+    link: {
+      type: String,
       required: true,
+    },
+    state: {
+      type: String,
+      required: true,
+      enum: ['pending', 'expired', 'accepted'],
+      default: 'pending',
     },
   },
   { timestamps: true }
