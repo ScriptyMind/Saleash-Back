@@ -110,4 +110,5 @@ module.exports = {
   getAccepted,
   createOne,
   deleteOne,
+  deleteMany,
 };
