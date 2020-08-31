@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const connect = require('./db/connect');
 const authRouter = require('./routes/api/Auth');
+const invitationRouter = require('./routes/api/Invitation');
 require('dotenv').config();
 
 const app = express();
@@ -12,6 +13,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(morgan('dev'));
 
+app.use('/api/invitation', invitationRouter);
 app.use('/api/user', authRouter);
 
 // connect to mongodb and start the server

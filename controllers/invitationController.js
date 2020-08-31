@@ -3,7 +3,10 @@ const Invitation = require('../models/Invitation');
 
 const getAccepted = async (req, res) => {
   try {
-    const invitations = await Invitation.find({ manager: req.user.id, state: 'accepted' })
+    const invitations = await Invitation.find({
+      manager: req.user.id,
+      state: 'accepted',
+    })
       .sort({ createdAt: -1 })
       .lean()
       .exec();
@@ -16,7 +19,10 @@ const getAccepted = async (req, res) => {
 
 const getPending = async (req, res) => {
   try {
-    const invitations = await Invitation.find({ manager: req.user.id, state: 'pending' })
+    const invitations = await Invitation.find({
+      manager: req.user.id,
+      state: "pending",
+    })
       .sort({ createdAt: -1 })
       .lean()
       .exec();
@@ -29,7 +35,10 @@ const getPending = async (req, res) => {
 
 const getExpired = async (req, res) => {
   try {
-    const invitations = await Invitation.find({ manager: req.user.id, state: 'expired' })
+    const invitations = await Invitation.find({
+      manager: req.user.id,
+      state: 'expired',
+    })
       .sort({ createdAt: -1 })
       .lean()
       .exec();
@@ -58,7 +67,7 @@ const createOne = async (req, res) => {
   const manager = req.user._id;
   // eslint-disable-next-line prefer-destructuring
   const company = req.user.company;
-  const link = `${req.url}/${mongoose.Types.ObjectId()}`;
+  const link = `${req.headers.host}/api/invitation/${mongoose.Types.ObjectId()}`;
   try {
     const invitation = await Invitation.create({ company, manager, link });
     res.status(201).json({ data: invitation });
@@ -88,7 +97,7 @@ const deleteMany = async (req, res) => {
   try {
     const removed = await Invitation.deleteMany({
       _id: {
-        $in: req.body.ids
+        $in: req.body.ids,
       },
       // eslint-disable-next-line no-underscore-dangle
       manager: req.user.id,
@@ -103,25 +112,24 @@ const deleteMany = async (req, res) => {
   }
 };
 
-const updateOne = async (req, res) {
+const updateOne = async (req, res) => {
   try {
     const updated = await Invitation.findOneAndUpdate(
       {
         _id: req.body.id,
       },
       {
-         state: req.body.state,
-         user: req.user.id
+        state: req.body.state,
+        user: req.user.id,
       }
     );
-    if (!updated)
-      res.status(400).end();
+    if (!updated) res.status(400).end();
     return res.status(200).json({ data: updated });
   } catch (e) {
     console.log(e);
     res.status(400).end();
   }
-}
+};
 
 module.exports = {
   getAll,
