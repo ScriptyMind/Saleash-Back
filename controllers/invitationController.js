@@ -43,3 +43,9 @@ const deleteOne = async (req, res) => {
     res.status(400).end();
   }
 };
+
+module.exports = {
+  getAll,
+  createOne,
+  deleteOne,
+};
