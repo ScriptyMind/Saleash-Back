@@ -14,6 +14,19 @@ const getPending = async (req, res) => {
   }
 }
 
+const getExpired = async (req, res) => {
+  try {
+    const invitations = await Invitation.find({ manager: req.user.id, state: 'expired' })
+      .sort({ createdAt: -1 })
+      .lean()
+      .exec();
+    res.status(200).json({ data: invitations });
+  } catch (e) {
+    console.log(e);
+    res.status(400).end();
+  }
+}
+
 const getAll = async (req, res) => {
   try {
     const invitations = await Invitation.find({ manager: req.user.id })
