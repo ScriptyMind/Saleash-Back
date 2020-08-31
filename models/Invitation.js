@@ -22,7 +22,7 @@ const invitationSchema = mongoose.Schema(
       default: 'pending',
     },
   },
-  { timestamps: true }
+  { timestamps: () => new Date() }
 );
 
 const Invitation = mongoose.model('invitation', invitationSchema);

@@ -103,6 +103,24 @@ const deleteMany = async (req, res) => {
   }
 };
 
+const updateOne = async (req, res) {
+  try {
+    const updated = await Invitation.findOneAndUpdate(
+      {
+        _id: req.body.id,
+        manager: req.user.id,
+      },
+      { state: req.body.state }
+    );
+    if (!updated)
+      res.status(400).end();
+    return res.status(200).json({ data: updated });
+  } catch (e) {
+    console.log(e);
+    res.status(400).end();
+  }
+}
+
 module.exports = {
   getAll,
   getPending,
