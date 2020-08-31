@@ -1,6 +1,19 @@
 const mongoose = require('mongoose');
 const Invitation = require('../models/Invitation');
 
+const getAccepted = async (req, res) => {
+  try {
+    const invitations = await Invitation.find({ manager: req.user.id, state: 'accepted' })
+      .sort({ createdAt: -1 })
+      .lean()
+      .exec();
+    res.status(200).json({ data: invitations });
+  } catch (e) {
+    console.log(e);
+    res.status(400).end();
+  }
+};
+
 const getPending = async (req, res) => {
   try {
     const invitations = await Invitation.find({ manager: req.user.id, state: 'pending' })
@@ -12,7 +25,7 @@ const getPending = async (req, res) => {
     console.log(e);
     res.status(400).end();
   }
-}
+};
 
 const getExpired = async (req, res) => {
   try {
@@ -25,7 +38,7 @@ const getExpired = async (req, res) => {
     console.log(e);
     res.status(400).end();
   }
-}
+};
 
 const getAll = async (req, res) => {
   try {
@@ -71,9 +84,30 @@ const deleteOne = async (req, res) => {
   }
 };
 
+const deleteMany = async (req, res) => {
+  try {
+    const removed = await Invitation.deleteMany({
+      _id: {
+        $in: req.body.ids
+      },
+      // eslint-disable-next-line no-underscore-dangle
+      manager: req.user.id,
+    });
+    if (!removed) {
+      return res.status(400).end();
+    }
+    return res.status(200).json({ data: removed });
+  } catch (e) {
+    console.log(e);
+    res.status(400).end();
+  }
+};
+
 module.exports = {
   getAll,
-  getpending,
+  getPending,
+  getExpired,
+  getAccepted,
   createOne,
   deleteOne,
 };
