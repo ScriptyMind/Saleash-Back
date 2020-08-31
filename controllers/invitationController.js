@@ -108,9 +108,11 @@ const updateOne = async (req, res) {
     const updated = await Invitation.findOneAndUpdate(
       {
         _id: req.body.id,
-        user: req.user.id,
       },
-      { state: req.body.state }
+      {
+         state: req.body.state,
+         user: req.user.id
+      }
     );
     if (!updated)
       res.status(400).end();
