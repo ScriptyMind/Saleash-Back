@@ -15,6 +15,10 @@ const invitationSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    user: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'user',
+    },
     state: {
       type: String,
       required: true,

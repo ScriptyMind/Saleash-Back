@@ -108,7 +108,7 @@ const updateOne = async (req, res) {
     const updated = await Invitation.findOneAndUpdate(
       {
         _id: req.body.id,
-        manager: req.user.id,
+        user: req.user.id,
       },
       { state: req.body.state }
     );
@@ -129,4 +129,5 @@ module.exports = {
   createOne,
   deleteOne,
   deleteMany,
+  updateOne,
 };
