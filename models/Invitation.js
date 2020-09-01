@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { db } = require('./User');
 
 const invitationSchema = mongoose.Schema(
   {
@@ -26,6 +27,7 @@ const invitationSchema = mongoose.Schema(
       default: 'pending',
     },
   },
+  { timestamps: true }
 );
 
 invitationSchema.index({ createdAt: 1 }, { expireAfterSeconds: 3600 });

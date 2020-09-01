@@ -64,13 +64,12 @@ const getAll = async (req, res) => {
 
 const createOne = async (req, res) => {
   // eslint-disable-next-line no-underscore-dangle
-//  const manager = req.user._id;
+  const manager = req.user._id;
   // eslint-disable-next-line prefer-destructuring
-  const company = 'charika';
+  const company = req.user.company;
   const link = `${req.headers.host}/api/invitation/${mongoose.Types.ObjectId()}`;
   try {
-    const invitation = await Invitation.create({ company, link });
-    console.log(invitation);
+    const invitation = await Invitation.create({ company, manager, link });
     res.status(201).json({ data: invitation });
   } catch (e) {
     console.log(e);
@@ -82,7 +81,7 @@ const deleteOne = async (req, res) => {
   try {
     const removed = await Invitation.findOneAndRemove({
       _id: req.params.id,
-      manager: req.user._id,
+      manager: req.user.id,
     });
     if (!removed) {
       return res.status(400).end();
