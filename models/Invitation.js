@@ -9,7 +9,7 @@ const invitationSchema = mongoose.Schema(
     manager: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'manager',
-      required: true,
+    //  required: true,
     },
     link: {
       type: String,

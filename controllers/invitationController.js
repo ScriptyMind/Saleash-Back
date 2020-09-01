@@ -64,12 +64,13 @@ const getAll = async (req, res) => {
 
 const createOne = async (req, res) => {
   // eslint-disable-next-line no-underscore-dangle
-  const manager = req.user._id;
+//  const manager = req.user._id;
   // eslint-disable-next-line prefer-destructuring
-  const company = req.user.company;
+  const company = 'charika';
   const link = `${req.headers.host}/api/invitation/${mongoose.Types.ObjectId()}`;
   try {
-    const invitation = await Invitation.create({ company, manager, link });
+    const invitation = await Invitation.create({ company, link });
+    console.log(invitation);
     res.status(201).json({ data: invitation });
   } catch (e) {
     console.log(e);
