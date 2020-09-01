@@ -26,8 +26,8 @@ const invitationSchema = mongoose.Schema(
       default: 'pending',
     },
   },
-  { timestamps: () => new Date() }
 );
 
+invitationSchema.index({ createdAt: 1 }, { expireAfterSeconds: 3600 });
 const Invitation = mongoose.model('invitation', invitationSchema);
 module.exports = Invitation;
