@@ -22,7 +22,7 @@ const getPending = async (req, res) => {
   try {
     const invitations = await Invitation.find({
       manager: req.user.id,
-      state: "pending",
+      state: 'pending',
     })
       .sort({ createdAt: -1 })
       .lean()
@@ -116,9 +116,7 @@ const deleteMany = async (req, res) => {
 const updateOne = async (req, res) => {
   try {
     const updated = await Invitation.findOneAndUpdate(
-      {
-        _id: req.body.id,
-      },
+      { _id: req.body.id },
       {
         state: req.body.state,
         user: req.user.id,
@@ -130,6 +128,11 @@ const updateOne = async (req, res) => {
       if (req.user.role === 'driver') {
         await Manager.findByIdAndUpdate(req.managerId,
           { $push: { drivers: req.user.id } }, { new: true })
+          .lean()
+          .exec();
+      } else if (req.user.role === 'agent') {
+        await Manager.findByIdAndUpdate(req.managerId,
+          { $push: { agents: req.user.id } }, { new: true })
           .lean()
           .exec();
       }
