@@ -128,7 +128,7 @@ const updateOne = async (req, res) => {
     if (req.body.state === 'accepted') {
       if (req.user.role === 'driver') {
         await Manager.findByIdAndUpdate(req.managerId,
-          { $push: { drivers: req.user.id } })
+          { $push: { drivers: req.user.id } }, { new: true })
           .lean()
           .exec();
       }
