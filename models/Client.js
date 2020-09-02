@@ -13,6 +13,11 @@ const clientSchema = mongoose.Schema(
     adress: {
       type: String,
       required: true,
+    },
+    user: {
+      ref: mongoose.SchemaTypes.ObjectId,
+      type: String,
+      required: true
     }
   },
   { timestamps: true }

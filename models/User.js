@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const driver = require('./Driver');
 const manager = require('./Manager');
+const client = require('./Client');
 const agent = require('./Agent');
 
 const UserSchema = new mongoose.Schema({
@@ -20,7 +21,7 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['driver', 'agent', 'manager', 'admin']
+    enum: ['driver', 'agent', 'manager', 'client', 'admin']
   },
   orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }],
   date: {
@@ -54,6 +55,9 @@ UserSchema.post('remove', async (doc, next) => {
       await manager.findByIdAndDelete(doc.id);
     } else if (doc.role === 'agent') {
       await agent.findByIdAndDelete(doc.id);
+    } else if (doc.role === 'client') {
+      await client.findByIdAndDelete(doc.id);
+      return next();
     }
     return next();
   } catch (e) {
