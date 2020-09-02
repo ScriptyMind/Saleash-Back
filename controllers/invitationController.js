@@ -122,7 +122,8 @@ const updateOne = async (req, res) => {
       {
         state: req.body.state,
         user: req.user.id,
-      }
+      },
+      { new: true }
     );
     if (!updated) res.status(400).end();
     if (req.body.state === 'accepted') {
