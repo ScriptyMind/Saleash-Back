@@ -2,11 +2,6 @@ const mongoose = require('mongoose');
 
 const orderSchema = mongoose.Schema(
   {
-    date: {
-      type: Date,
-      required: true,
-      default: Date.now
-    },
     deliveryDate: {
       type: Date,
       required: true,
@@ -18,6 +13,8 @@ const orderSchema = mongoose.Schema(
     state: {
       type: String,
       required: true,
+      default: 'in progress',
+      enum: ['in progress', 'completed']
     },
     manager: {
       type: mongoose.SchemaTypes.ObjectId,
