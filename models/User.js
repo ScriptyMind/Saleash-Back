@@ -17,6 +17,7 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
+    enum: ['driver', 'agent', 'manager', 'admin']
   },
   orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }],
   date: {

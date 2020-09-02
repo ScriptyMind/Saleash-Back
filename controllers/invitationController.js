@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Manager = require('../models/Manager')
 const Invitation = require('../models/Invitation');
 
 const getAccepted = async (req, res) => {
@@ -64,7 +65,7 @@ const getAll = async (req, res) => {
 
 const createOne = async (req, res) => {
   // eslint-disable-next-line no-underscore-dangle
-  const manager = req.user._id;
+  const manager = req.user.id;
   // eslint-disable-next-line prefer-destructuring
   const company = req.user.company;
   const link = `${req.headers.host}/api/invitation/${mongoose.Types.ObjectId()}`;
@@ -124,6 +125,14 @@ const updateOne = async (req, res) => {
       }
     );
     if (!updated) res.status(400).end();
+    if (req.body.state === 'accepted') {
+      if (req.user.role === 'driver') {
+        const manager = await Manager.findByIdAndUpdate(req.managerId,
+          { $push: { drivers: req.user.id } })
+          .lean()
+          .exec();
+      }
+    }
     return res.status(200).json({ data: updated });
   } catch (e) {
     console.log(e);
