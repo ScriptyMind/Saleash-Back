@@ -61,7 +61,7 @@ UserSchema.post('remove', async (doc, next) => {
     }
     return next();
   } catch (e) {
-    console.log(e);
+    console.error(e);
     return next();
   }
 });
