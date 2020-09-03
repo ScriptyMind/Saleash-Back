@@ -13,7 +13,7 @@ const getAccepted = async (req, res) => {
       .exec();
     res.status(200).json({ data: invitations });
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(400).end();
   }
 };
@@ -29,7 +29,7 @@ const getPending = async (req, res) => {
       .exec();
     res.status(200).json({ data: invitations });
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(400).end();
   }
 };
@@ -45,7 +45,7 @@ const getExpired = async (req, res) => {
       .exec();
     res.status(200).json({ data: invitations });
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(400).end();
   }
 };
@@ -58,7 +58,7 @@ const getAll = async (req, res) => {
       .exec();
     res.status(200).json({ data: invitations });
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(400).end();
   }
 };
@@ -73,7 +73,7 @@ const createOne = async (req, res) => {
     const invitation = await Invitation.create({ company, manager, link });
     res.status(201).json({ data: invitation });
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(400).end();
   }
 };
@@ -89,7 +89,7 @@ const deleteOne = async (req, res) => {
     }
     return res.status(200).json({ data: removed });
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(400).end();
   }
 };
@@ -108,7 +108,7 @@ const deleteMany = async (req, res) => {
     }
     return res.status(200).json({ data: removed });
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(400).end();
   }
 };
@@ -139,7 +139,7 @@ const updateOne = async (req, res) => {
     }
     return res.status(200).json({ data: updated });
   } catch (e) {
-    console.log(e);
+    console.error(e);
     res.status(400).end();
   }
 };
