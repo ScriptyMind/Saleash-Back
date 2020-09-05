@@ -43,4 +43,4 @@ module.exports = {
   createOne,
   deleteOne,
   updateOne
-}
+};
