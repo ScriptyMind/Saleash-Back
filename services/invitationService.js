@@ -1,54 +1,43 @@
-const mongoose = require('mongoose');
-const Manager = require('../models/Manager')
+const Manager = require('../models/Manager');
 const Invitation = require('../models/Invitation');
+const Agent = require('../models/Agent');
+const parentService = require('./parentService');
 
-const getAccepted = async (req, res) => {
-  try {
-    const invitations = await Invitation.find({
-      manager: req.user.id,
-      state: 'accepted',
-    })
-      .sort({ createdAt: -1 })
-      .lean()
-      .exec();
-    res.status(200).json({ data: invitations });
-  } catch (e) {
-    console.error(e);
-    res.status(400).end();
-  }
-};
+const getAccepted = (id) => new Promise((resolve, reject) => {
+  Invitation.find({
+    manager: id,
+    state: 'accepted',
+  })
+    .sort({ createdAt: -1 })
+    .lean()
+    .exec()
+    .then((invitations) => resolve(invitations))
+    .catch((e) => reject(e));
+});
 
-const getPending = async (req, res) => {
-  try {
-    const invitations = await Invitation.find({
-      manager: req.user.id,
-      state: 'pending',
-    })
-      .sort({ createdAt: -1 })
-      .lean()
-      .exec();
-    res.status(200).json({ data: invitations });
-  } catch (e) {
-    console.error(e);
-    res.status(400).end();
-  }
-};
+const getPending = (id) => new Promise((resolve, reject) => {
+  Invitation.find({
+    manager: id,
+    state: 'pending',
+  })
+    .sort({ createdAt: -1 })
+    .lean()
+    .exec()
+    .then((invitations) => resolve(invitations))
+    .catch((e) => reject(e));
+});
 
-const getExpired = async (req, res) => {
-  try {
-    const invitations = await Invitation.find({
-      manager: req.user.id,
-      state: 'expired',
-    })
-      .sort({ createdAt: -1 })
-      .lean()
-      .exec();
-    res.status(200).json({ data: invitations });
-  } catch (e) {
-    console.error(e);
-    res.status(400).end();
-  }
-};
+const getExpired = (id) => new Promise((resolve, reject) => {
+  Invitation.find({
+    manager: id,
+    state: 'expired',
+  })
+    .sort({ createdAt: -1 })
+    .lean()
+    .exec()
+    .then((invitations) => resolve(invitations))
+    .catch((e) => reject(e));
+});
 
 const getAll = async (req, res) => {
   try {
@@ -63,94 +52,68 @@ const getAll = async (req, res) => {
   }
 };
 
-const createOne = async (req, res) => {
-  // eslint-disable-next-line no-underscore-dangle
-  const manager = req.user.id;
-  // eslint-disable-next-line prefer-destructuring
-  const company = req.user.company;
-  const link = `${req.headers.host}/api/invitation/${mongoose.Types.ObjectId()}`;
-  try {
-    const invitation = await Invitation.create({ company, manager, link });
-    res.status(201).json({ data: invitation });
-  } catch (e) {
-    console.error(e);
-    res.status(400).end();
-  }
-};
+// const createOne = async (data) => {
+//   // const manager = req.user.id;
+//   // const company = req.user.company;
+//   // const link = `${req.headers.host}/api/invitation/${mongoose.Types.ObjectId()}`;
+//   try {
+//     const invitation = await Invitation.create(data);
+//     Promise.resolve(invitation);
+//   } catch (e) {
+//     console.error(e);
+//     Promise.reject(e);
+//   }
+// };
 
-const deleteOne = async (req, res) => {
-  try {
-    const removed = await Invitation.findOneAndRemove({
-      _id: req.params.id,
-      manager: req.user.id,
-    });
-    if (!removed) {
-      return res.status(400).end();
-    }
-    return res.status(200).json({ data: removed });
-  } catch (e) {
-    console.error(e);
-    res.status(400).end();
-  }
-};
-
-const deleteMany = async (req, res) => {
-  try {
-    const removed = await Invitation.deleteMany({
-      _id: {
-        $in: req.body.ids,
-      },
-      // eslint-disable-next-line no-underscore-dangle
-      manager: req.user.id,
-    });
-    if (!removed) {
-      return res.status(400).end();
-    }
-    return res.status(200).json({ data: removed });
-  } catch (e) {
-    console.error(e);
-    res.status(400).end();
-  }
-};
-
-const updateOne = async (req, res) => {
-  try {
-    const updated = await Invitation.findOneAndUpdate(
-      { _id: req.body.id },
-      {
-        state: req.body.state,
-        user: req.user.id,
-      },
-      { new: true }
-    );
-    if (!updated) res.status(400).end();
-    if (req.body.state === 'accepted') {
-      if (req.user.role === 'driver') {
-        await Manager.findByIdAndUpdate(req.managerId,
-          { $push: { drivers: req.user.id } }, { new: true })
-          .lean()
-          .exec();
-      } else if (req.user.role === 'agent') {
-        await Manager.findByIdAndUpdate(req.managerId,
-          { $push: { agents: req.user.id } }, { new: true })
-          .lean()
-          .exec();
+const deleteMany = (idsFilter, managerId) => new Promise((resolve, reject) => {
+  Invitation.deleteMany({
+    _id: {
+      $in: idsFilter,
+    },
+    manager: managerId,
+  })
+    .exec()
+    .then((removed) => {
+      if (!removed) {
+        reject(new Error('something went wrong!'));
       }
-    }
-    return res.status(200).json({ data: updated });
-  } catch (e) {
-    console.error(e);
-    res.status(400).end();
-  }
-};
+      resolve(removed);
+    })
+    .catch((e) => reject(e));
+});
+
+const updateOne = (filter, data, role, manager) => new Promise((resolve, reject) => {
+  Invitation.findOneAndUpdate(
+    filter,
+    data,
+    { new: true }
+  )
+    .lean()
+    .exec()
+    .then((updated) => {
+      if (!updated) reject(new Error('Something went wrong!'));
+      if (updated.state === 'accepted') {
+        if (role === 'driver') {
+          parentService.updateOne(Manager)(manager.id,
+            { $push: { drivers: filter.id } }, { new: true })
+            .catch((e) => reject(e));
+        } else if (role === 'agent') {
+          parentService.updateOne(Agent)(manager.id,
+            { $push: { drivers: filter.id } }, { new: true })
+            .catch((e) => reject(e));
+        }
+      }
+      resolve(updated);
+    })
+    .catch((e) => reject(e));
+});
 
 module.exports = {
   getAll,
   getPending,
   getExpired,
   getAccepted,
-  createOne,
-  deleteOne,
   deleteMany,
   updateOne,
+  ...parentService(Invitation)
 };

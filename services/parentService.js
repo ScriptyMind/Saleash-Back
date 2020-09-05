@@ -1,5 +1,5 @@
-const getOne = (model) => (id) => new Promise((resolve, reject) => {
-  model.findById(id).lean().exec()
+const getOne = (model) => (filter) => new Promise((resolve, reject) => {
+  model.findOne(filter).lean().exec()
     .then((doc) => {
       if (!doc) reject(new Error('Empty document'));
       resolve(doc);
@@ -16,14 +16,14 @@ const getAll = (model) => new Promise((resolve, reject) => {
     .catch((e) => reject(e));
 });
 
-const createOne = (model) => (doc) => new Promise((resolve, reject) => {
-  model.create(doc)
-    .then(resolve(doc))
+const createOne = (model) => (data) => new Promise((resolve, reject) => {
+  model.create(data)
+    .then(resolve(data))
     .catch((e) => reject(e));
 });
 
-const deleteOne = (model) => (id) => new Promise((resolve, reject) => {
-  model.findByIdAndRemove(id).lean().exec()
+const deleteOne = (model) => (filter) => new Promise((resolve, reject) => {
+  model.findOneAndRemove(filter).lean().exec()
     .then((removed) => {
       if (!removed) reject(new Error('An error occured'));
       resolve(removed);
@@ -31,8 +31,8 @@ const deleteOne = (model) => (id) => new Promise((resolve, reject) => {
     .catch((e) => reject(e));
 });
 
-const updateOne = (model) => (data) => new Promise((resolve, reject) => {
-  model.findByIdAndUpdate(data).lean().exec()
+const updateOne = (model) => (filter, data, options) => new Promise((resolve, reject) => {
+  model.findOneAndUpdate(filter, data, options).lean().exec()
     .then((updated) => {
       if (!updated) {
         reject(new Error('An error occured'));
