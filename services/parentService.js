@@ -18,7 +18,10 @@ const getAll = (model) => new Promise((resolve, reject) => {
 
 const createOne = (model) => (data) => new Promise((resolve, reject) => {
   model.create(data)
-    .then(resolve(data))
+    .then((doc) => {
+      if (!doc) reject(new Error('Something went wrong'));
+      resolve(doc);
+    })
     .catch((e) => reject(e));
 });
 
@@ -44,7 +47,7 @@ const updateOne = (model) => (filter, data, options) => new Promise((resolve, re
 
 module.exports = (model) => ({
   getOne: getOne(model),
-  getAll: getAll(model),
+  getAll,
   createOne: createOne(model),
   updateOne: updateOne(model),
   deleteOne: deleteOne(model),
