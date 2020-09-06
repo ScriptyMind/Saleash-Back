@@ -1,6 +1,5 @@
 const Manager = require('../models/Manager');
 const Invitation = require('../models/Invitation');
-const Agent = require('../models/Agent');
 const parentService = require('./parentService');
 
 const getAccepted = (id) => new Promise((resolve, reject) => {
@@ -82,7 +81,7 @@ const deleteMany = (idsFilter, managerId) => new Promise((resolve, reject) => {
     .catch((e) => reject(e));
 });
 
-const updateOne = (filter, data, role, manager) => new Promise((resolve, reject) => {
+const updateOne = (filter, data, role) => new Promise((resolve, reject) => {
   Invitation.findOneAndUpdate(
     filter,
     data,
@@ -94,12 +93,12 @@ const updateOne = (filter, data, role, manager) => new Promise((resolve, reject)
       if (!updated) reject(new Error('Something went wrong!'));
       if (updated.state === 'accepted') {
         if (role === 'driver') {
-          parentService.updateOne(Manager)(manager.id,
+          parentService.updateOne(Manager)(updated.manager,
             { $push: { drivers: filter.id } }, { new: true })
             .catch((e) => reject(e));
         } else if (role === 'agent') {
-          parentService.updateOne(Agent)(manager.id,
-            { $push: { drivers: filter.id } }, { new: true })
+          parentService.updateOne(Manager)(updated.manager,
+            { $push: { agents: filter.id } }, { new: true })
             .catch((e) => reject(e));
         }
       }
@@ -109,11 +108,11 @@ const updateOne = (filter, data, role, manager) => new Promise((resolve, reject)
 });
 
 module.exports = {
+  ...parentService(Invitation),
   getAll,
   getPending,
   getExpired,
   getAccepted,
   deleteMany,
   updateOne,
-  ...parentService(Invitation)
 };
