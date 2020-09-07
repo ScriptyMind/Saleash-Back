@@ -1,7 +1,7 @@
 const getOne = (model) => (filter) => new Promise((resolve, reject) => {
   model.findOne(filter).lean().exec()
     .then((doc) => {
-      if (!doc) reject(new Error('Empty document'));
+      if (!doc) reject(new Error('Error Occured'));
       resolve(doc);
     })
     .catch((e) => reject(e));
@@ -10,7 +10,7 @@ const getOne = (model) => (filter) => new Promise((resolve, reject) => {
 const getAll = (model) => new Promise((resolve, reject) => {
   model.find({}).lean().exec()
     .then((docs) => {
-      if (!docs) reject(new Error('Empty documents'));
+      if (!docs) reject(new Error('Error Occured '));
       resolve(docs);
     })
     .catch((e) => reject(e));
