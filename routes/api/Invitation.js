@@ -1,9 +1,9 @@
-const { Router, json } = require('express');
-const Invitation = require('../../models/Invitation');
+const { Router } = require('express');
 const invitationController = require('../../controllers/invitationController');
 
 const router = Router();
 
+router.post('/accept', invitationController.acceptInvitation);
 // router.get('/', invitationController.createOne);
 
 // router.get('/getone', async (req, res) => {
