@@ -20,14 +20,13 @@ const acceptInvitation = async (req, res) => {
 const rejectInvitation = async (req, res) => {
   try {
     const invitation = await invitationService.updateOne(
-      { id: req.body.id },
+      { _id: req.body.id },
       {
         state: 'rejected',
-        user: req.user.id
+        // user: req.user.id
       },
       req.body.role
     );
-    if (!invitation) return res.status(400).end();
     res.status(200).json({ data: invitation });
   } catch (e) {
     console.log(e);
