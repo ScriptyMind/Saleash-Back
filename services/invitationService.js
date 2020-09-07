@@ -93,11 +93,14 @@ const updateOne = (filter, data, role) => new Promise((resolve, reject) => {
       if (!updated) reject(new Error('Something went wrong!'));
       if (updated.state === 'accepted') {
         if (role === 'driver') {
-          parentService.updateOne(Manager)(updated.manager,
+          parentService(Manager).updateOne(updated.manager,
             { $push: { drivers: filter.id } }, { new: true })
+            .then((res) => {
+              console.log(`Helloo${res}`);
+            })
             .catch((e) => reject(e));
         } else if (role === 'agent') {
-          parentService.updateOne(Manager)(updated.manager,
+          parentService(Manager).updateOne(updated.manager,
             { $push: { agents: filter.id } }, { new: true })
             .catch((e) => reject(e));
         }
