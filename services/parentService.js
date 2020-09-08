@@ -7,7 +7,7 @@ const getOne = (model) => (filter) => new Promise((resolve, reject) => {
     .catch((e) => reject(e));
 });
 
-const getAll = (model) => new Promise((resolve, reject) => {
+const getAll = (model) => () => new Promise((resolve, reject) => {
   model.find({}).lean().exec()
     .then((docs) => {
       if (!docs) reject(new Error('Error Occured '));
@@ -40,6 +40,7 @@ const updateOne = (model) => (filter, data, options) => new Promise((resolve, re
       if (!updated) {
         reject(new Error('An error occured'));
       }
+      console.log(updated);
       resolve(updated);
     })
     .catch((e) => reject(e));
@@ -47,7 +48,7 @@ const updateOne = (model) => (filter, data, options) => new Promise((resolve, re
 
 module.exports = (model) => ({
   getOne: getOne(model),
-  getAll,
+  getAll: getAll(model),
   createOne: createOne(model),
   updateOne: updateOne(model),
   deleteOne: deleteOne(model),
