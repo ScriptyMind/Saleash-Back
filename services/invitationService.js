@@ -38,16 +38,13 @@ const getExpired = (id) => new Promise((resolve, reject) => {
     .catch((e) => reject(e));
 });
 
-const getAll = async (req, res) => {
+const getAll = async (manager) => {
   try {
-    const invitations = await Invitation.find({ manager: req.user.id })
-      .sort({ createdAt: -1 })
-      .lean()
-      .exec();
-    res.status(200).json({ data: invitations });
+    const invitations = await Invitation.find(manager).lean().exec();
+    if (!invitations) Promise.reject(new Error('Error occured'));
+    Promise.resolve(invitations);
   } catch (e) {
     console.error(e);
-    res.status(400).end();
   }
 };
 
@@ -82,6 +79,8 @@ const deleteMany = (idsFilter, managerId) => new Promise((resolve, reject) => {
 });
 
 const updateOne = (filter, data, role) => new Promise((resolve, reject) => {
+  console.log(filter);
+  console.log(data);
   Invitation.findOneAndUpdate(
     filter,
     data,
@@ -94,14 +93,17 @@ const updateOne = (filter, data, role) => new Promise((resolve, reject) => {
       if (updated.state === 'accepted') {
         if (role === 'driver') {
           parentService(Manager).updateOne(updated.manager,
-            { $push: { drivers: filter.id } }, { new: true })
+            { $push: { drivers: data.user } }, { new: true })
             .then((res) => {
-              console.log(`Helloo${res}`);
+              console.log(res);
             })
             .catch((e) => reject(e));
         } else if (role === 'agent') {
           parentService(Manager).updateOne(updated.manager,
-            { $push: { agents: filter.id } }, { new: true })
+            { $push: { agents: data.user } }, { new: true })
+            .then((res) => {
+              console.log(res);
+            })
             .catch((e) => reject(e));
         }
       }
