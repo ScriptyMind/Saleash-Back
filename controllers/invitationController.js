@@ -1,12 +1,24 @@
+const mongoose = require('mongoose');
 const invitationService = require('../services/invitationService');
+const driverService = require('../services/driverService');
+const parentService = require('../services/parentService');
+const User = require('../models/User');
+const agentService = require('../services/agentService');
 
 const acceptInvitation = async (req, res) => {
   try {
+    const user = await parentService(User).createOne(req.body.user);
+    let userType = null;
+    if (req.body.role === 'driver') {
+      userType = await driverService.createOne({ ...req.body.driver, user: user.id });
+    } else if (req.body.role === 'agent') {
+      userType = await agentService.createOne({ ...req.body.agent, user: user.id });
+    }
     const invitation = await invitationService.updateOne(
       { _id: req.body.id },
       {
         state: 'accepted',
-        // user: req.user.id
+        user: userType.id
       },
       req.body.role
     );
@@ -23,7 +35,6 @@ const rejectInvitation = async (req, res) => {
       { _id: req.body.id },
       {
         state: 'rejected',
-        // user: req.user.id
       },
       req.body.role
     );
