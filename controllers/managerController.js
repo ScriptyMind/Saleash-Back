@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const managerService = require('../services/managerService');
 const invitationService = require('../services/invitationService');
+const driverService = require('../services/driverService');
+const connect = require('../db/connect');
 
 const createInvitation = async (req, res) => {
   const invitation = {
@@ -32,7 +34,7 @@ const deleteInvitation = async (req, res) => {
 
 const deleteDriver = async (req, res) => {
   try {
-    const manager = managerService.deleteDriver(req.user.id, req.body.driver.id);
+    const manager = await managerService.deleteDriver(req.user.id, req.body.driver.id);
     console.log(manager);
     res.status(200).json({ data: manager });
   } catch (e) {
@@ -41,8 +43,34 @@ const deleteDriver = async (req, res) => {
   }
 };
 
+const getDrivers = async (managerId) => {
+  try {
+    // const driversIds = (await managerService.getMany({
+    //   _id: managerId }, { drivers: 1, _id: 0
+    // }))[0];
+    // const drivers = await driverService.getAll( { $in: { _id: driversIds } });
+    const drivers = await managerService.getAllDrivers(managerId);
+    console.log(drivers);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const start = async () => {
+  try {
+    await connect();
+    console.log('connected to db');
+    await getDrivers('5f5794b3261dba0adb4c419d');
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+start();
+
 module.exports = {
   createInvitation,
   deleteInvitation,
-  deleteDriver
+  deleteDriver,
+  getDrivers
 };
