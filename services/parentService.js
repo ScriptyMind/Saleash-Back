@@ -66,6 +66,15 @@ const updateOne = (model) => (filter, data, options) => new Promise((resolve, re
     .catch((e) => reject(e));
 });
 
+const checkIfExist = (model) => (filter) => new Promise((resolve, reject) => {
+  model.findOne(filter).lean().exec()
+    .then((doc) => {
+      if (!doc) return resolve(false);
+      return resolve(true);
+    })
+    .catch((e) => reject(e));
+});
+
 module.exports = (model) => ({
   getOne: getOne(model),
   getAll: getAll(model),
@@ -73,5 +82,6 @@ module.exports = (model) => ({
   updateOne: updateOne(model),
   deleteOne: deleteOne(model),
   getMany: getMany(model),
-  getPopulate: getPopulate(model)
+  getPopulate: getPopulate(model),
+  checkIfExist: checkIfExist(model)
 });
