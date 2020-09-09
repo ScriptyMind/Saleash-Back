@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 const managerService = require('../services/managerService');
 const invitationService = require('../services/invitationService');
-const parentService = require('../services/parentService');
-const driverService = require('../services/driverService');
-const User = require('../models/User');
-const Manager = require('../models/Manager');
 
 const createInvitation = async (req, res) => {
   const invitation = {
@@ -44,21 +40,6 @@ const deleteDriver = async (req, res) => {
     res.status(400).end();
   }
 };
-
-// const connect = require('../db/connect');
-// const Invitation = require('../models/Invitation');
-
-// const start = async () => {
-//   try {
-//     await connect();
-//     console.log('connected to database');
-//     const drivers = await deleteDriver()
-//     console.log(drivers);
-//   } catch (e) {
-//     console.log(e);
-//   }
-// };
-// start();
 
 module.exports = {
   createInvitation,
