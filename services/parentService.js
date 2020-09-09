@@ -1,8 +1,8 @@
 const getOne = (model) => (filter) => new Promise((resolve, reject) => {
   model.findOne(filter).lean().exec()
     .then((doc) => {
-      if (!doc) reject(new Error('Error Occured'));
-      resolve(doc);
+      if (!doc) return reject(new Error('Error Occured'));
+      return resolve(doc);
     })
     .catch((e) => reject(e));
 });
@@ -10,8 +10,8 @@ const getOne = (model) => (filter) => new Promise((resolve, reject) => {
 const getAll = (model) => (fields = '') => new Promise((resolve, reject) => {
   model.find({}).select(fields).lean().exec()
     .then((docs) => {
-      if (!docs) reject(new Error('Error Occured '));
-      resolve(docs);
+      if (!docs) return reject(new Error('Error Occured '));
+      return resolve(docs);
     })
     .catch((e) => reject(e));
 });
@@ -21,9 +21,8 @@ const getPopulate = (model) => (filter, ref, fields = '') => new Promise((resolv
     .lean()
     .exec()
     .then((docs) => {
-      if (!docs) reject(new Error('Something Happened'));
-      console.log(docs);
-      resolve(docs);
+      if (!docs) return reject(new Error('Something Happened'));
+      return resolve(docs);
     })
     .catch((e) => reject(e));
 });
@@ -31,8 +30,8 @@ const getPopulate = (model) => (filter, ref, fields = '') => new Promise((resolv
 const getMany = (model) => (filter, fields = '') => new Promise((resolve, reject) => {
   model.find(filter).select(fields).lean().exec()
     .then((docs) => {
-      if (!docs) reject(new Error('Error Occured'));
-      resolve(docs);
+      if (!docs) return reject(new Error('Error Occured'));
+      return resolve(docs);
     })
     .catch((e) => reject(e));
 });
@@ -40,8 +39,8 @@ const getMany = (model) => (filter, fields = '') => new Promise((resolve, reject
 const createOne = (model) => (data) => new Promise((resolve, reject) => {
   model.create(data)
     .then((doc) => {
-      if (!doc) reject(new Error('Something went wrong'));
-      resolve(doc);
+      if (!doc) return reject(new Error('Something went wrong'));
+      return resolve(doc);
     })
     .catch((e) => reject(e));
 });
@@ -49,8 +48,8 @@ const createOne = (model) => (data) => new Promise((resolve, reject) => {
 const deleteOne = (model) => (filter) => new Promise((resolve, reject) => {
   model.findOneAndRemove(filter).lean().exec()
     .then((removed) => {
-      if (!removed) reject(new Error('An error occured'));
-      resolve(removed);
+      if (!removed) return reject(new Error('An error occured'));
+      return resolve(removed);
     })
     .catch((e) => reject(e));
 });
@@ -59,10 +58,10 @@ const updateOne = (model) => (filter, data, options) => new Promise((resolve, re
   model.findOneAndUpdate(filter, data, options).lean().exec()
     .then((updated) => {
       if (!updated) {
-        reject(new Error('An error occured'));
+        return reject(new Error('An error occured'));
       }
       console.log(updated);
-      resolve(updated);
+      return resolve(updated);
     })
     .catch((e) => reject(e));
 });
