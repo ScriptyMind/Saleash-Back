@@ -16,9 +16,9 @@ module.exports.register = async (req, res) => {
   const { email, password, name } = req.body;
   try {
     const exist = await parentService(User).checkIfExist({ email });
-    if (exist) res.status(400).json({ message: 'Account already exists', msgError: false });
+    if (exist) return res.status(400).json({ message: 'Account already exists', msgError: false });
     const user = await parentService(User).createOne({ email, password, name });
-    res.status(201).json({ data: user });
+    return res.status(201).json({ data: user });
   } catch (error) {
     res.status(500).json({ message: 'Error has occured', msgError: true });
   }
