@@ -9,4 +9,13 @@ const deleteDriver = async (managerId, driverId) => {
   Promise.resolve(manager);
 };
 
-module.exports = { ...parentService(Manager), deleteDriver };
+const getAllDrivers = async (managerId) => {
+  try {
+    const drivers = await parentService(Manager).getPopulate({ _id: managerId }, 'drivers');
+    Promise.resolve(drivers);
+  } catch (e) {
+    Promise.reject(e);
+  }
+};
+
+module.exports = { ...parentService(Manager), deleteDriver, getAllDrivers };

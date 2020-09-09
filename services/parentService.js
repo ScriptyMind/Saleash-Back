@@ -7,10 +7,31 @@ const getOne = (model) => (filter) => new Promise((resolve, reject) => {
     .catch((e) => reject(e));
 });
 
-const getAll = (model) => () => new Promise((resolve, reject) => {
-  model.find({}).lean().exec()
+const getAll = (model) => (fields = '') => new Promise((resolve, reject) => {
+  model.find({}).select(fields).lean().exec()
     .then((docs) => {
       if (!docs) reject(new Error('Error Occured '));
+      resolve(docs);
+    })
+    .catch((e) => reject(e));
+});
+
+const getPopulate = (model) => (filter, ref, fields = '') => new Promise((resolve, reject) => {
+  model.find(filter).populate(ref).select(fields)
+    .lean()
+    .exec()
+    .then((docs) => {
+      if (!docs) reject(new Error('Something Happened'));
+      console.log(docs);
+      resolve(docs);
+    })
+    .catch((e) => reject(e));
+});
+
+const getMany = (model) => (filter, fields = '') => new Promise((resolve, reject) => {
+  model.find(filter).select(fields).lean().exec()
+    .then((docs) => {
+      if (!docs) reject(new Error('Error Occured'));
       resolve(docs);
     })
     .catch((e) => reject(e));
@@ -52,4 +73,6 @@ module.exports = (model) => ({
   createOne: createOne(model),
   updateOne: updateOne(model),
   deleteOne: deleteOne(model),
+  getMany: getMany(model),
+  getPopulate: getPopulate(model)
 });
