@@ -1,19 +1,13 @@
 const { Router } = require('express');
 const invitationController = require('../../controllers/invitationController');
+const managerController = require('../../controllers/managerController');
 
-const router = Router();
+const invitationRouter = Router();
 
-router.post('/accept', invitationController.acceptInvitation);
-// router.get('/', invitationController.createOne);
+invitationRouter.post('/', managerController.createInvitation);
 
-// router.get('/getone', async (req, res) => {
-//   try {
-//     const rec = await Invitation.findOne({ company: 'taha' }).exec();
-//     res.status(200).json({ data: rec });
-//   } catch (e) {
-//     console.log(e);
-//     res.end();
-//   }
-// });
+invitationRouter.put('/', invitationController.acceptInvitation);
 
-module.exports = router;
+invitationRouter.delete('/', managerController.deleteInvitation);
+
+module.exports = invitationRouter;
